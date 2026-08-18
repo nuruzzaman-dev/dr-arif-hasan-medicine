@@ -1,25 +1,81 @@
-import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
-import { Streamdown } from 'streamdown';
+/* Quiet Clinical Editorial: asymmetric magazine rhythm, warm ivory + charcoal + River Teal, direct appointment UX, restrained motion. */
+import { useEffect, useState } from "react";
+import { ArrowDownRight, ArrowRight, Check, ChevronDown, Menu, X } from "lucide-react";
 
-/**
- * All content in this page are only for example, replace with your own feature implementation
- * When building pages, remember your instructions in Frontend Best Practices, Design Guide and Common Pitfalls
- */
+const heroImage = "/manus-storage/dr-arif-hero_eb143f61.png";
+const consultImage = "/manus-storage/consultation-editorial_93d25490.png";
+const diabetesImage = "/manus-storage/diabetes-editorial_1388e7ea.png";
+const monogram = "/manus-storage/arif-hasan-monogram_be87d735.png";
+
+const expertise = [
+  { no: "01", name: "General Medicine", intro: "A considered first step when symptoms are unclear, persistent, or affecting everyday life.", items: ["Fever & infections", "Headache", "Weakness & fatigue", "Unexplained symptoms"] },
+  { no: "02", name: "Diabetes & Metabolic Health", intro: "Practical support for building a clear, sustainable approach to blood sugar and lifestyle.", items: ["Type 2 diabetes", "Prediabetes", "Blood sugar management", "Lifestyle planning"] },
+  { no: "03", name: "Hypertension & Heart Risk", intro: "Internal medicine care focused on understanding risk factors and protecting long-term health.", items: ["High blood pressure", "Cholesterol management", "Risk assessment", "Preventive monitoring"] },
+  { no: "04", name: "Respiratory Medicine", intro: "Assessment and ongoing management for common breathing concerns and respiratory symptoms.", items: ["Asthma management", "Chronic cough", "Respiratory infections", "Breathlessness"] },
+  { no: "05", name: "Gastrointestinal & Liver Health", intro: "A calm, contextual approach to recurring digestive discomfort and basic liver health evaluation.", items: ["Acid reflux", "Indigestion", "IBS-related symptoms", "Basic liver evaluation"] },
+  { no: "06", name: "Chronic Disease Management", intro: "Consistent follow-up for people managing more than one condition or a long-term health plan.", items: ["Diabetes & hypertension", "Thyroid-related conditions", "Kidney risk monitoring", "Preventive planning"] },
+];
+
+function useReveals() {
+  useEffect(() => {
+    const elements = document.querySelectorAll<HTMLElement>(".reveal, .image-reveal");
+    const observer = new IntersectionObserver((entries) => entries.forEach((entry) => entry.isIntersecting && entry.target.classList.add("is-visible")), { threshold: 0.12 });
+    elements.forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
+}
+
+function Logo() {
+  return <a href="#top" className="flex items-center gap-3" aria-label="Arif Hasan home"><img src={monogram} alt="" className="h-9 w-9 object-contain" /><span className="leading-none"><strong className="serif block text-[16px] leading-none tracking-[.08em]">ARIF HASAN</strong><small className="mt-1 block text-[9px] uppercase tracking-[.14em] text-[#6d756f]">Medicine Specialist</small></span></a>;
+}
+
 export default function Home() {
-  // If theme is switchable in App.tsx, we can implement theme toggling like this:
-  // const { theme, toggleTheme } = useTheme();
-
+  const [navOpen, setNavOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [activeExpertise, setActiveExpertise] = useState(0);
+  useReveals();
+  useEffect(() => { const onScroll = () => setScrolled(window.scrollY > 24); window.addEventListener("scroll", onScroll); return () => window.removeEventListener("scroll", onScroll); }, []);
+  const closeNav = () => setNavOpen(false);
   return (
-    <div className="min-h-screen flex flex-col">
+    <div id="top" className="overflow-hidden">
+      <aside className="care-rail" aria-label="Care journey"><span className="care-rail-line" /><span className="care-rail-label">A considered path to care</span><span className="care-rail-dot care-rail-dot-top" /><span className="care-rail-dot care-rail-dot-bottom" /></aside>
+      <header className={`fixed inset-x-0 top-0 z-50 border-b transition-all duration-300 ${scrolled ? "border-[#d5d0c5] bg-[#f4f1ea]/95 py-3 backdrop-blur-md" : "border-transparent bg-transparent py-5"}`}>
+        <div className="container flex items-center justify-between"><div className="brand-lockup"><Logo /></div><nav className="hidden items-center gap-7 lg:flex">{[["About", "about"], ["Expertise", "expertise"], ["Patient Guide", "journey"], ["Journal", "journal"], ["Contact", "contact"]].map(([label, id]) => <a key={id} href={`#${id}`} className="text-[10px] font-bold uppercase tracking-[.12em] text-[#4b514b] transition-colors hover:text-[#2e6f6b]">{label}</a>)}</nav><div className="hidden lg:block"><a href="#contact" className="btn-primary min-h-[42px]">Book an Appointment <ArrowRight size={14} /></a></div><button className="lg:hidden" aria-label={navOpen ? "Close menu" : "Open menu"} onClick={() => setNavOpen(!navOpen)}>{navOpen ? <X size={23} /> : <Menu size={23} />}</button></div>
+        {navOpen && <div className="absolute inset-x-0 top-full border-b border-[#d5d0c5] bg-[#f4f1ea] px-5 py-6 shadow-sm lg:hidden"><nav className="flex flex-col gap-5">{[["About", "about"], ["Expertise", "expertise"], ["Patient Guide", "journey"], ["Journal", "journal"], ["Contact", "contact"]].map(([label, id]) => <a onClick={closeNav} key={id} href={`#${id}`} className="text-xs font-bold uppercase tracking-[.15em]">{label}</a>)}<a onClick={closeNav} href="#contact" className="btn-primary mt-2">Book an Appointment <ArrowRight size={14} /></a></nav></div>}
+      </header>
+
       <main>
-        {/* Example: lucide-react for icons */}
-        <Loader2 className="animate-spin" />
-        Example Page
-        {/* Example: Streamdown for markdown rendering */}
-        <Streamdown>Any **markdown** content</Streamdown>
-        <Button variant="default">Example Button</Button>
+        <section className="relative min-h-[760px] bg-[#e9e5dc] pt-32 lg:min-h-[840px] lg:pt-40">
+          <div className="absolute inset-y-0 right-0 hidden w-[56%] bg-[#dfe4dc] lg:block" />
+          <div className="container relative grid items-center gap-12 lg:grid-cols-[.88fr_1.12fr] lg:gap-8">
+            <div className="relative z-10 max-w-[630px] pb-14 lg:pb-20">
+              <div className="reveal section-label">Dr. Arif Hasan <span className="text-[#87918a]">/</span> Dhaka, Bangladesh</div>
+              <p className="reveal mt-7 text-[11px] font-bold uppercase tracking-[.14em] text-[#6d756f]" style={{ transitionDelay: ".08s" }}>MBBS, FCPS (Medicine)</p>
+              <h1 className="serif reveal mt-4 max-w-[650px] text-[clamp(3.35rem,7vw,7.5rem)] leading-[.93] tracking-[-.04em] text-[#2d2c29]" style={{ transitionDelay: ".14s" }}>Thoughtful medical care for <em className="text-[#2e6f6b]">healthier,</em> more informed lives.</h1>
+              <p className="reveal mt-8 max-w-[440px] text-[15px] leading-7 text-[#575b55]" style={{ transitionDelay: ".22s" }}>Comprehensive adult medical care focused on accurate diagnosis, clear communication, and practical long-term health management.</p>
+              <div className="reveal mt-9 flex flex-wrap items-center gap-7" style={{ transitionDelay: ".3s" }}><a href="#contact" className="btn-primary">Book an Appointment <ArrowRight size={15} /></a><a href="#expertise" className="btn-ghost">Explore Expertise <ArrowDownRight size={15} /></a></div>
+            </div>
+            <div className="relative z-10 lg:-mr-8"><div className="image-reveal relative ml-auto max-w-[570px]" style={{ transitionDelay: ".16s" }}><img src={heroImage} alt="Fictional portrait of Dr. Arif Hasan" className="aspect-[3/4] w-full object-cover object-center" /><div className="absolute inset-0 bg-gradient-to-t from-[#253b39]/20 via-transparent to-transparent" /></div><div className="reveal absolute -bottom-7 left-3 flex items-start gap-3 border-l border-[#2e6f6b] bg-[#f4f1ea]/90 px-4 py-3 backdrop-blur-sm lg:-left-8" style={{ transitionDelay: ".55s" }}><span className="mt-1 h-2 w-2 rounded-full bg-[#2e6f6b]" /><div><p className="text-[10px] font-extrabold uppercase tracking-[.12em]">Consultant Physician</p><p className="mt-1 text-[11px] text-[#6d756f]">Adult Medicine · Dhaka</p></div></div></div>
+          </div>
+          <div className="container absolute bottom-6 left-1/2 flex -translate-x-1/2 items-center justify-between"><span className="text-[10px] font-bold uppercase tracking-[.16em] text-[#788078]">01 — Introduction</span><span className="hidden items-center gap-3 text-[10px] font-bold uppercase tracking-[.16em] text-[#788078] sm:flex">Scroll to explore <span className="h-px w-12 bg-[#788078]" /></span></div>
+        </section>
+
+        <section className="border-b border-[#cdc8bd] bg-[#f4f1ea] py-10"><div className="container grid grid-cols-2 gap-y-8 md:grid-cols-4 md:gap-0">{[["MBBS, FCPS", "Medical qualifications"], ["10+ years", "Fictional demo experience"], ["Adult medicine", "Primary focus"], ["Dhaka", "Bangladesh"]].map(([big, small], i) => <div key={big} className={`reveal ${i ? "md:border-l md:border-[#cdc8bd] md:pl-7" : ""}`} style={{ transitionDelay: `${i * 60}ms` }}><p className="serif text-[27px] leading-none text-[#2e6f6b]">{big}</p><p className="mt-2 text-[10px] font-bold uppercase tracking-[.11em] text-[#727970]">{small}</p></div>)}</div></section>
+
+        <section id="about" className="bg-[#f4f1ea] py-28 lg:py-40"><div className="container grid gap-14 lg:grid-cols-[.92fr_1.08fr] lg:gap-24"><div className="reveal relative lg:pt-12"><div className="absolute -left-3 -top-2 h-24 w-24 border-l border-t border-[#2e6f6b] lg:-left-8 lg:top-4" /><div className="image-reveal relative ml-5 max-w-[470px]"><img src={consultImage} alt="Fictional consultation scene" className="aspect-[4/5] w-full object-cover" /></div><p className="mt-5 ml-5 text-[10px] font-bold uppercase tracking-[.15em] text-[#798078]">A consultation shaped by listening</p></div><div className="max-w-[670px]"><div className="reveal section-label">02 — The approach</div><h2 className="serif reveal mt-7 text-[clamp(2.7rem,5vw,5.3rem)] leading-[.98] tracking-[-.035em]" style={{ transitionDelay: ".08s" }}>A physician who believes good medicine begins with <em className="text-[#2e6f6b]">listening.</em></h2><div className="reveal mt-8 grid gap-8 border-t border-[#cdc8bd] pt-7 sm:grid-cols-[1fr_1.1fr]" style={{ transitionDelay: ".15s" }}><p className="text-[15px] leading-7 text-[#575b55]">Dr. Arif Hasan is a fictional medicine specialist focused on adult medical care, chronic disease management, preventive health, and evidence-informed treatment planning.</p><div className="space-y-5 text-[12px] leading-5 text-[#6d756f]"><p><strong className="text-[#312e29]">Patient communication</strong><br />Clear explanations that respect your questions.</p><p><strong className="text-[#312e29]">Long-term management</strong><br />A practical plan you can carry into daily life.</p></div></div><blockquote className="reveal mt-14 border-l-2 border-[#2e6f6b] pl-6" style={{ transitionDelay: ".22s" }}><p className="serif text-[28px] leading-tight text-[#2e6f6b]">“Listen carefully. Diagnose thoughtfully. Explain clearly.”</p><cite className="mt-3 block text-[10px] font-bold uppercase tracking-[.16em] text-[#737a72] not-italic">Clinical philosophy</cite></blockquote></div></div></section>
+
+        <section id="expertise" className="bg-[#2b3836] py-28 text-[#f4f1ea] lg:py-36"><div className="container"><div className="grid gap-14 lg:grid-cols-[.65fr_1.35fr] lg:gap-20"><div className="lg:sticky lg:top-28 lg:h-fit"><div className="section-label text-[#a9beb0] before:bg-[#86aaa0]">03 — Medical expertise</div><h2 className="serif mt-7 max-w-[440px] text-[clamp(2.8rem,5vw,5.4rem)] leading-[.96] tracking-[-.035em]">Comprehensive adult medicine, centered around the <em className="text-[#a9c3b1]">whole patient.</em></h2><p className="mt-7 max-w-[370px] text-[14px] leading-7 text-[#bac4bc]">Care is tailored to your symptoms, history, and goals—not reduced to a single number or isolated concern.</p><a href="#contact" className="mt-9 inline-flex items-center gap-3 text-[10px] font-extrabold uppercase tracking-[.15em] text-[#a9c3b1]">Discuss your health <ArrowRight size={14} /></a></div><div className="space-y-2">{expertise.map((item, i) => <div key={item.no} className={`border-t border-[#53635e] ${activeExpertise === i ? "bg-[#354845]" : ""}`}><button className="flex w-full items-start justify-between gap-5 py-6 text-left lg:py-7" onClick={() => setActiveExpertise(activeExpertise === i ? -1 : i)} aria-expanded={activeExpertise === i}><span className="flex items-start gap-5"><span className="text-[10px] font-bold tracking-[.12em] text-[#8aa69a]">{item.no}</span><span className="serif text-[28px] leading-none lg:text-[36px]">{item.name}</span></span><ChevronDown size={19} className={`mt-1 shrink-0 text-[#9bb3a5] transition-transform ${activeExpertise === i ? "rotate-180" : ""}`} /></button><div className={`grid transition-[grid-template-rows,opacity] duration-300 ${activeExpertise === i ? "grid-rows-[1fr] pb-7 opacity-100" : "grid-rows-[0fr] opacity-0"}`}><div className="overflow-hidden pl-10 lg:pl-[54px]"><p className="max-w-[550px] text-[14px] leading-6 text-[#bac4bc]">{item.intro}</p><div className="mt-5 flex flex-wrap gap-x-6 gap-y-2">{item.items.map((sub) => <span key={sub} className="flex items-center gap-2 text-[11px] uppercase tracking-[.08em] text-[#d5ddd4]"><span className="h-1 w-1 rounded-full bg-[#8aa69a]" />{sub}</span>)}</div></div></div></div>)}</div></div></div></section>
+
+        <section className="bg-[#e4ebe3] py-24 lg:py-32"><div className="container grid items-center gap-12 lg:grid-cols-[1.1fr_.9fr]"><div className="reveal order-2 lg:order-1"><div className="section-label">04 — Health editorial</div><h2 className="serif mt-7 max-w-[670px] text-[clamp(2.7rem,5vw,5.7rem)] leading-[.95] tracking-[-.04em]">Living well with diabetes starts with <em className="text-[#2e6f6b]">understanding it.</em></h2><p className="mt-7 max-w-[510px] text-[15px] leading-7 text-[#575f59]">Regular monitoring, sustainable routines, medication adherence, and thoughtful follow-up can make long-term health feel less overwhelming and more manageable.</p><a href="#contact" className="btn-ghost mt-8">Discuss your health <ArrowRight size={15} /></a></div><div className="image-reveal order-1 relative lg:order-2"><img src={diabetesImage} alt="Editorial still life representing informed diabetes care" className="aspect-[4/3] w-full object-cover" /></div></div></section>
+
+        <section id="journey" className="bg-[#f4f1ea] py-28 lg:py-36"><div className="container"><div className="grid gap-14 lg:grid-cols-[.7fr_1.3fr] lg:gap-24"><div><div className="reveal section-label">05 — Patient guide</div><h2 className="serif reveal mt-7 max-w-[400px] text-[clamp(2.8rem,5vw,5.2rem)] leading-[.96] tracking-[-.035em]">What happens during your <em className="text-[#2e6f6b]">consultation?</em></h2></div><div className="relative"><div className="absolute bottom-0 left-[15px] top-0 w-px bg-[#cdc8bd]" /><div className="space-y-12">{[["01", "Listen", "Understanding symptoms, concerns, and medical history."], ["02", "Assess", "Clinical evaluation and appropriate diagnostic consideration."], ["03", "Explain", "Clear discussion of findings and treatment options."], ["04", "Follow up", "Ongoing monitoring and adjustment when needed."]].map(([no, title, text], i) => <div className="reveal relative grid grid-cols-[32px_1fr] gap-7" key={no} style={{ transitionDelay: `${i * 70}ms` }}><div className="relative z-10 flex h-8 w-8 items-center justify-center rounded-full border border-[#2e6f6b] bg-[#f4f1ea] text-[10px] font-bold text-[#2e6f6b]">{no}</div><div className="border-b border-[#cdc8bd] pb-9"><h3 className="serif text-[34px] leading-none">{title}</h3><p className="mt-3 max-w-[450px] text-[14px] leading-6 text-[#6b716b]">{text}</p></div></div>)}</div></div></div></div></section>
+
+        <section id="journal" className="bg-[#dfe7de] py-28 lg:py-36"><div className="container"><div className="section-label">06 — A note from the practice</div><blockquote className="reveal mt-8 max-w-[1000px]"><p className="serif text-[clamp(2.8rem,6vw,6.5rem)] leading-[.94] tracking-[-.04em] text-[#2d3834]">“Good healthcare is not only about treating a condition. It is about helping patients understand their health.”</p><footer className="mt-9 flex items-center gap-4 text-[10px] font-bold uppercase tracking-[.16em] text-[#5e6b61]"><span className="h-px w-9 bg-[#2e6f6b]" />Dr. Arif Hasan <span className="font-normal tracking-normal text-[#7a847b]">Fictional / demo quote</span></footer></blockquote></div></section>
+
+        <section id="contact" className="bg-[#f4f1ea] py-28 lg:py-36"><div className="container grid gap-14 lg:grid-cols-[1fr_.8fr] lg:gap-24"><div><div className="section-label">07 — Appointment</div><h2 className="serif mt-7 max-w-[720px] text-[clamp(3rem,6vw,6.5rem)] leading-[.93] tracking-[-.04em]">Start with a conversation about your <em className="text-[#2e6f6b]">health.</em></h2><p className="mt-8 max-w-[450px] text-[15px] leading-7 text-[#575b55]">Appointments are fictional for presentation purposes. Use the details below to explore the intended booking experience.</p><a href="mailto:appointments@example.com" className="btn-primary mt-9">Request an appointment <ArrowRight size={15} /></a></div><div className="border-t border-[#cdc8bd] pt-6 lg:mt-20"><div className="mb-9"><p className="eyebrow">Clinic details — demo</p><p className="mt-3 text-[15px] leading-7 text-[#575b55]">Dhaka, Bangladesh<br />Sunday–Thursday · 5:00–9:00 PM</p></div><div className="mb-9"><p className="eyebrow">Appointment desk — demo</p><a href="mailto:appointments@example.com" className="mt-3 block text-[15px] text-[#2e6f6b] underline underline-offset-4">appointments@example.com</a></div><div><p className="eyebrow">Registration reference</p><p className="mt-3 text-[15px] text-[#575b55]">BMDC Registration — DEMO</p></div></div></div></section>
       </main>
+      <footer className="border-t border-[#cdc8bd] bg-[#f4f1ea] py-8"><div className="container flex flex-col justify-between gap-5 sm:flex-row sm:items-center"><div><Logo /><p className="mt-3 pl-12 text-[9px] uppercase tracking-[.15em] text-[#7b8179]">Thoughtful care, clearly explained</p></div><div className="text-[10px] uppercase tracking-[.12em] text-[#7b8179]">Fictional physician profile · Presentation demo</div><a href="#top" className="text-[10px] font-bold uppercase tracking-[.12em] text-[#2e6f6b]">Back to top ↑</a></div></footer>
+      <div className="fixed bottom-4 right-4 z-40 hidden items-center gap-3 bg-[#2b3836] px-4 py-3 text-[10px] font-bold uppercase tracking-[.12em] text-[#f4f1ea] shadow-lg sm:flex"><Check size={14} className="text-[#9bb3a5]" /> Demo information only</div>
     </div>
   );
 }
