@@ -1,4 +1,5 @@
 /* Quiet Clinical Editorial: asymmetric magazine rhythm, warm ivory + charcoal + River Teal, direct appointment UX, restrained motion. */
+import { useAuth } from "@/_core/hooks/useAuth";
 import { useEffect, useState } from "react";
 import { ArrowDownRight, ArrowRight, Check, ChevronDown, Menu, X } from "lucide-react";
 
@@ -30,6 +31,13 @@ function Logo() {
 }
 
 export default function Home() {
+  // The useAuth hook provides authentication state.
+  // To implement login/logout, call logout(), or start login from an event
+  // handler: onClick={() => startLogin()} (imported from "@/const"). Never call
+  // startLogin() during render (no href={startLogin()}) — it mints a one-time
+  // nonce cookie and must run only at the moment of navigation.
+  let { user, loading, error, isAuthenticated, logout } = useAuth();
+
   const [navOpen, setNavOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeExpertise, setActiveExpertise] = useState(0);
